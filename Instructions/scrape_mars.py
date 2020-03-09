@@ -1,5 +1,5 @@
-!/usr/bin/env python
- coding: utf-8
+#!/usr/bin/env python
+# coding: utf-8
 
 ### Web Scraping Homework - Mission to Mars - Homework Startup Basics
 #   ![mission_to_mars](Images/mission_to_mars.png)
@@ -30,17 +30,31 @@ import re
 from bs4 import BeautifulSoup
 from splinter import Browser
 
+def init_browser():
+    executable_path = {"executable_path": "/Users/David W. Jones/class/chromedriver"}
+    return Browser("chrome", **executable_path, headless=False)
+
+def scrape():
+    browser = init_browser()
+
+###########
+
 #   Provide Chromedriver executable path adn browser type - Chrome
 def init_browser()
     executable_path = {'executable_path': 'chromedriver.exe'}
-    browser = Browser('chrome', **executable_path, headless=False)
+    return Browser('chrome', **executable_path, headless=False)
+
+def scrape():
+    browser = init_browser()
+
+#   Create Dictionary for scraped data
+mars_data = {}
+
 
 #   Set sleep mode to 'x' seconds so the new chrome window can open to the above url.
     t=5
     t1=10
-
 ### NASA MARS NEWS
-
 ### Paragraph Text. Assign the text to variables that you can reference later.
 #   --- python ---
 #   Example:
@@ -50,11 +64,6 @@ def init_browser()
 #   -- the first interplanetary launch in history from America's West Coast."
 
 #   Provide URL to be scraped and have browser go to URL provided in the line of code that populated the url variable
-def scrape():
-    browser = init_browser()
-
-#   Create Dictionary for scraped data
-mars_scraped_data = {}
 
 #   Mars URL to Scrape data from 
 nasa_news = 'https://mars.nasa.gov/news/'
@@ -74,9 +83,9 @@ news_title = article.find("div", class_="content_title").text
 news_paragraph = article.find("div", class_="article_teaser_body").text
 
 #   Add data to dictionary for the 3 fields.
-mars_scraped_data =["news_date"] = news_date
-mars_scraped_data =["news_title"] = news_title
-mars_scraped_data =["news_paragraph"] = news_paragraph
+mars_data =["news_date"] = news_date
+mars_data =["news_title"] = news_title
+mars_data =["news_paragraph"] = news_paragraph
 
 ### JPL MARS SPACE IMAGES - FEATURED IMAGES
 
@@ -114,7 +123,7 @@ with open('img.jpg', 'wb') as out_file:
     shutil.copyfileobj(response.raw, out_file)
 
     # Add the feature image to the mars_scraped_data dictionary
-mars_scraped_data = ["featured_image_url"] = featured_image_url
+mars_data = ["featured_image_url"] = featured_image_url
 
 ####   Print the image URL
 #print(f"The image url is: {featured_image_url}")
@@ -162,7 +171,7 @@ for tweet in tweets:
         pass
 
 #   Move the contents of the mars_weather variable which should be the latest weather conditions on Mars to the dictionary    
-mars_scraped_data["mars_weather"] = mars_weather
+mars_data["mars_weather"] = mars_weather
 
 ### MARS FACTS
 #   * Visit the Mars Facts webpage [here](https://space-facts.com/mars/) and use Pandas to
@@ -185,22 +194,22 @@ mars_facts_df
 #   Takes the above dataFrame in mars_facts_df and converts it into html placing the results in mars_facts_html then moves to the 
 #   dictionary.
 mars_facts_html=mars_facts_df.to_html(header = False, index = False)
-mars_scraped_data["mars_facts_html"] = mars_facts_html
+mars_data["mars_facts_html"] = mars_facts_html
 
-### MARS HEMISPHERES
+### MARS Hemisphere
 
 #   * Visit the USGS Astrogeology site [here](https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars) to 
-#     obtain high resolution images for each of Mar's hemispheres.
-#   * You will need to click each of the links to the hemispheres in order to find the image url to the full resolution image.
-#   * Save both the image url string for the full resolution hemisphere image, and the Hemisphere title containing the hemisphere name. Use #     a Python dictionary to store the data using the keys `img_url` and `title`.
-#   * Append the dictionary with the image url string and the hemisphere title to a list. This list will contain one dictionary for each #  #     hemisphere.
+#     obtain high resolution images for each of Mar's hemisphere.
+#   * You will need to click each of the links to the hemisphere in order to find the image url to the full resolution image.
+#   * Save both the image url string for the full resolution hemisphere image, and the hemispherE title containing the hemisphere name. Use #     a Python dictionary to store the data using the keys `img_url` and `title`.
+#   * Append the dictionary with the image url string and the hemispher title to a list. This list will contain one dictionary for each #  #     hemispherephere.
 #   --- python ---
 #   Example:
-#   hemisphere_image_urls = [
-#       {"title": "Valles Marineris Hemisphere", "img_url": "..."},
-#       {"title": "Cerberus Hemisphere", "img_url": "..."},
-#       {"title": "Schiaparelli Hemisphere", "img_url": "..."},
-#       {"title": "Syrtis Major Hemisphere", "img_url": "..."},         ]
+#   hemispherephere_image_urls = [
+#       {"title": "Valles Marineris hemisphere", "img_url": "..."},
+#       {"title": "Cerberus hemisphere", "img_url": "..."},
+#       {"title": "Schiaparelli hemisphere", "img_url": "..."},
+#       {"title": "Syrtis Major hemispherE", "img_url": "..."},         ]
 
 #   Visit the USGS Astogeology site and scrape url and picture info for each hemisphere.
 hemisphere = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
@@ -212,7 +221,7 @@ soup = BeautifulSoup(html, 'html.parser')
 mars_hemisphere=[]
 
 #   Loop through the four tags then load the data to the dictionary.
-#   Append data from the dictionary into the variable mars_hemisphere to be displayed.
+#   Append data from the dictionary into the variable mars_hemispherephere to be displayed.
 
 for i in range (4):
     time.sleep(t)
@@ -227,10 +236,13 @@ for i in range (4):
     mars_hemisphere.append(dictionary)
     browser.back()
 
-    #   Displayed contents of mars_hemisphere - did not use 'print' statement as it does not present as well as with 'print'.
-mars_scraped_data["mars_hemisphere"]=mars_hemisphere
+    #   Displayed contents of mars_hemispherephere - did not use 'print' statement as it does not present as well as with 'print'.
+mars_data["mars_hemisphere"]=mars_hemisphere
+
+#Return the dictionary
+return mars_data
 
 # close browser
-browser.quit()
+#browser.quit()
 
 ##                                                        THE END                                                                     ##
