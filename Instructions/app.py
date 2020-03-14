@@ -1,7 +1,5 @@
 from flask import Flask, render_template, redirect
-from flask_pymongo import pymongo
-from pymongo import MongoClient
-
+from flask_pymongo import PyMongo
 
 # From the separate python file in this directory, we'll import the code that is used to scrape mars
 import scrape_mars
@@ -9,14 +7,14 @@ import scrape_mars
 app = Flask(__name__)
 
 # Use flask_pymongo to set up mongo connection
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/mars_db"
-# mongo = PyMongo(app)
-
-conn = 'mongodb://localhost:27017'
-client = pymongo.MongoClient(conn)
+app.config["MONGO_URI"] = "mongodb://localhost:27017/mars_db"
+mongo = PyMongo(app)
 
 # set database (used this first time to create db)
-db=client.mars_db
+#db=client.mars_db
+
+#conn = 'mongodb://localhost:27017'
+#client = pymongo.MongoClient(conn)
 
 # This route will query the Mongo database and get the mars result
 # and then render them to the html file
@@ -42,3 +40,4 @@ def scraper():
     return redirect("/")
 
 if __name__ == "__main__":
+    app.run(debug=True)
