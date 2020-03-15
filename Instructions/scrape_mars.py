@@ -102,7 +102,7 @@ def scrape():
     ### MARS FACTS
     #   Mars Facts url put into a variable
     mars_facts_url = "https://space-facts.com/mars/"
-    browser.visit(mars_fact_url)
+    browser.visit(mars_facts_url)
     time.sleep(5)
 
     #   Read the url html data and create an index into a pandas variable named table
@@ -125,17 +125,17 @@ def scrape():
     hemisphere = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     browser.visit(hemisphere)
     time.sleep(5)
-
+    print('7a-Hemisphere')
     #   Use splinter to loop through the 4 images and load them into a dictionary
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
     mars_hemisphere=[]
-
+    print('7b-Hemisphere')
     #   Loop through the four tags then load the data to the dictionary.
-    #   Append data from the dictionary into the variable mars_hemispherephere to be displayed.
+    #   Append data from the dictionary into the variable mars_hemisphere to be displayed.
     for i in range (4):
         time.sleep(5)
-        images = browser.find_by_tag('h4')
+        images = browser.find_by_tag('h3')
         images[i].click()
         html = browser.html
         soup = BeautifulSoup(html, 'html.parser')
@@ -145,14 +145,14 @@ def scrape():
         dictionary={"title":img_title,"img_url":img_url}
         mars_hemisphere.append(dictionary)
         browser.back()
-
-    #   Displayed contents of mars_hemispherephere - did not use 'print' statement as it does not present as well as with 'print'.
-    mars_data["mars_hemisphere"]=mars_hemisphere
-    print('7-Hemisphere')
+    print('7c-Hemisphere')
+    #   Displayed contents of mars_hemisphere - did not use 'print' statement as it does not present as well as with 'print'.
+    mars_data["mars_hemisphere"] = mars_hemisphere
+    print('7d-Hemisphere')
 
     #Return the dictionary
     return mars_data
     print('8-Return-Data')
-
+ 
     # close browser
     browser.quit()
